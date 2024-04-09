@@ -1,0 +1,19 @@
+@baseUrl = http://localhost:3000
+@authToken = {{authenticate.response.body.access_token}}
+
+###
+# @name authenticate
+POST {{baseUrl}}/auth/sign-in
+Content-Type: application/json
+Accept: application/json
+
+{
+    "email": "tatiane.tiburcio@live.com",
+    "password": "abc123"
+}
+
+###
+# @name me
+GET {{baseUrl}}/auth/me
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
