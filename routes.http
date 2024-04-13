@@ -8,12 +8,59 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "email": "tatiane.tiburcio@live.com",
-    "password": "abc123"
+    "email": "rafael.tiburcio@live.com",
+    "password": "rafa1511"
+}
+
+###
+# @name create_user
+POST {{baseUrl}}/users
+Content-Type: application/json
+Accept: application/json
+
+{
+    "name": "Rafael",
+    "cpf": "354.936.798-84",
+    "role": "admin",
+    "email": "rafael.tiburcio@live.com",
+    "password": "rafa1511"
 }
 
 ###
 # @name me
 GET {{baseUrl}}/auth/me
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name create_order
+POST {{baseUrl}}/orders
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+    "price": "100.50",
+    "status": "waiting",
+    "size": "100",
+    "weight": "10"
+}
+
+###
+# @name get_orders
+GET {{baseUrl}}/orders?page=1&limit=10
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+# @name get_order_by_id
+GET {{baseUrl}}/orders/clut5w6tj000bqw7n35agyzg8
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name delete_order_by_id
+DELETE {{baseUrl}}/orders/clusz1w4h00014ws3olwxfvsv
 Content-Type: application/json
 Authorization: Bearer {{authToken}}

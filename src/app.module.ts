@@ -6,12 +6,13 @@ import { ZodValidationPipe } from 'nestjs-zod';
 import { ConfigModule } from '@nestjs/config'
 import { envSchema } from './env';
 import { AuthModule } from './auth/auth.module';
+import { OrderModule } from './order/order.module';
 
 @Module({
   imports: [ConfigModule.forRoot({
     validate: (env) => envSchema.parse(env),
     isGlobal: true,
-  }), AuthModule, UserModule, PrismaModule,],
+  }), AuthModule, UserModule, PrismaModule, OrderModule,],
   providers: [
     {
       provide: APP_PIPE,

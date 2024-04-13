@@ -11,9 +11,10 @@ model User {
   id        String   @id @default(cuid())
   name      String   @db.VarChar(100)
   cpf       String   @unique @db.VarChar(50)
-  role      Role
+  role      Role     @default(deliveryman)
   email     String   @unique @db.VarChar(100)
   password  String   @db.VarChar(255)
+  orders    Order[]
   createAt  DateTime @default(now()) @map("create_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
@@ -22,5 +23,45 @@ model User {
 
 enum Role {
   admin
-  user
+  deliveryman
+}
+
+model Order {
+  id        String      @id @default(cuid())
+  price     Decimal
+  status    Status      @default(dispatched)
+  size      Int
+  weight    Decimal
+  Recipient Recipient[]
+  userId    String?     @map("user_id")
+  User      User?       @relation(fields: [userId], references: [id])
+
+  @@map("orders")
+}
+
+enum Status {
+  waiting
+  dispatched
+  returned
+}
+
+model Recipient {
+  id        String  @id @default(cuid())
+  name      String  @db.VarChar(100)
+  addressId String  @map("address_id")
+  orderId   String  @map("order_id")
+  address   Address @relation(fields: [addressId], references: [id])
+  order     Order   @relation(fields: [orderId], references: [id])
+
+  @@map("recipients")
+}
+
+model Address {
+  id             String      @id @default(cuid())
+  street         String      @db.VarChar(150)
+  city           String      @db.VarChar(100)
+  identification String      @db.VarChar(30)
+  Recipient      Recipient[]
+
+  @@map("addresses")
 }

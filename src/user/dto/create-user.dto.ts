@@ -4,7 +4,7 @@ import { createZodDto } from 'nestjs-zod'
 const createUserDto = z.object({
     name: z.string().min(5),
     cpf: z.string().min(5),
-    role: z.enum(['admin', 'user']).default('user'),
+    role: z.enum(['admin', 'deliveryman']).default('deliveryman'),
     email: z.string().min(5),
     password: z.string().min(5),
 })

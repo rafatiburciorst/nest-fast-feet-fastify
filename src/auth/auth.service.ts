@@ -36,7 +36,7 @@ export class AuthService {
       const user = await this.userService.findUserByEmail(createAuthDto.email)
       if (!user) throw new UnauthorizedException('User credentials do not match')
       const isValidPassword = await compare(createAuthDto.password, user.password)
-      if (!isValidPassword) throw new UnauthorizedException('User credentials do not match xx')
+      if (!isValidPassword) throw new UnauthorizedException('User credentials do not match')
 
       const accessToken = this.jwt.sign({
         sub: user.id
