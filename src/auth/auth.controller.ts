@@ -1,9 +1,11 @@
 import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateAuthDto } from './dto/create-auth.dto';
-import { AuthGuard } from '@nestjs/passport';
 import { CurrentUser } from './current-user.decorator';
-import { TokenSchema } from './jwt.strategy';
+import { AuthToken } from './jwt.strategy';
+import { JwtAuthGuard } from './jwt.guard';
+import { RolesGuard } from './roles/roles.guard';
+import { Roles } from './roles/roles.decorator';
 
 @Controller('/auth')
 export class AuthController {
@@ -20,9 +22,10 @@ export class AuthController {
     }
   }
 
-  @UseGuards(AuthGuard('jwt'))
+  @Roles('admin', 'deliveryman')
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('/me')
-  async me(@CurrentUser() user: TokenSchema) {
+  async me(@CurrentUser() user: AuthToken) {
     const userPayload = await this.authService.me(user)
     return {
       user: userPayload.rest

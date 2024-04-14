@@ -4,7 +4,7 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { UserService } from 'src/user/user.service';
 import { compare } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import { TokenSchema } from './jwt.strategy';
+import { AuthToken } from './jwt.strategy';
 
 
 @Injectable()
@@ -39,7 +39,8 @@ export class AuthService {
       if (!isValidPassword) throw new UnauthorizedException('User credentials do not match')
 
       const accessToken = this.jwt.sign({
-        sub: user.id
+        sub: user.id,
+        roles: user.role
       })
 
       return {
@@ -48,7 +49,7 @@ export class AuthService {
     }
   }
 
-  async me(userToken: TokenSchema) {
+  async me(userToken: AuthToken) {
     const user = await this.prisma.user.findUnique({
       where: {
         id: userToken.sub

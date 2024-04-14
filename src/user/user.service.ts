@@ -62,7 +62,8 @@ export class UserService {
                 name: true,
                 email: true,
                 cpf: true,
-                password: true
+                password: true,
+                role: true
             }
         })
 

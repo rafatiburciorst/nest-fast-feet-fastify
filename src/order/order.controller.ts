@@ -3,24 +3,27 @@ import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { CurrentUser } from 'src/auth/current-user.decorator';
-import { TokenSchema } from 'src/auth/jwt.strategy';
-import { AuthGuard } from '@nestjs/passport';
+import { AuthToken } from 'src/auth/jwt.strategy';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { Roles } from 'src/auth/roles/roles.decorator';
+import { RolesGuard } from 'src/auth/roles/roles.guard';
 
 @Controller('/orders')
-@UseGuards(AuthGuard('jwt'))
+@Roles('admin')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class OrderController {
   constructor(private readonly orderService: OrderService) { }
 
   @Post()
   @HttpCode(HttpStatus.NO_CONTENT)
-  async create(@Body() createOrderDto: CreateOrderDto, @CurrentUser() { sub }: TokenSchema) {
+  async create(@Body() createOrderDto: CreateOrderDto, @CurrentUser() { sub }: AuthToken) {
     return this.orderService.create(createOrderDto, sub)
   }
 
 
   @Put(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async update(@Body() updateOrderDto: UpdateOrderDto, @Param() id: string, @CurrentUser() { sub }: TokenSchema) {
+  async update(@Body() updateOrderDto: UpdateOrderDto, @Param() id: string, @CurrentUser() { sub }: AuthToken) {
     return this.orderService.update(updateOrderDto, id, sub)
   }
 
@@ -43,7 +46,7 @@ export class OrderController {
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteOrderById(@Param('id') id: string, @CurrentUser() { sub }: TokenSchema) {
+  async deleteOrderById(@Param('id') id: string, @CurrentUser() { sub }: AuthToken) {
     return this.orderService.deleteOrderById(id, sub)
   }
 }

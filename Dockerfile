@@ -14,7 +14,6 @@ RUN apt-get update -y && apt-get install -y openssl
 
 RUN pnpm prisma generate
 
-
 RUN pnpm run build
 
 EXPOSE 3000

@@ -19,10 +19,10 @@ Content-Type: application/json
 Accept: application/json
 
 {
-    "name": "Rafael",
-    "cpf": "354.936.798-84",
+    "name": "Matheus",
+    "cpf": "355.936.798-84",
     "role": "admin",
-    "email": "rafael.tiburcio@live.com",
+    "email": "matheus.tiburcio@live.com",
     "password": "rafa1511"
 }
 
