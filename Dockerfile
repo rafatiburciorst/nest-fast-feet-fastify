@@ -1,21 +1,26 @@
-FROM node:20.12.1-slim
+FROM node:18 AS build
 
 WORKDIR /usr/src/app
 
-COPY package.json pnpm-lock.yaml ./
+COPY package.json package-lock.json .env ./
+
+RUN npm install
 
 COPY . .
 
-RUN npm install -g pnpm
+RUN npx prisma generate
+RUN npm run build
+RUN npm install --production
 
-RUN pnpm install --production
+FROM node:18-alpine3.19
 
-RUN apt-get update -y && apt-get install -y openssl
+WORKDIR /usr/src/app
 
-RUN pnpm prisma generate
+COPY --from=build /usr/src/app/package.json ./package.json
+COPY --from=build /usr/src/app/dist ./dist
+COPY --from=build /usr/src/app/node_modules ./node_modules
 
-RUN pnpm run build
 
 EXPOSE 3000
 
-CMD ["pnpm", "start"]
+CMD ["npm", "run", "start:prod"]
